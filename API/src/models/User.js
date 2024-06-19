@@ -50,7 +50,7 @@ module.exports = (sequelize) => {
                         msg: 'The password field cannot be empty'
                     },
                     len: {
-                        args: [8, 100],
+                        args: [8, 30],
                         msg: 'The password must be at least 8 characters long'
                     }
                 }

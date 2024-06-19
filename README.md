@@ -1,2 +1,2 @@
 # BRM-technical-test
-Online stores
+Online store

@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const {INTEGER, STRING,DATE, DECIMAL} = DataTypes
+const {INTEGER, STRING,DATE, DECIMAL, DOUBLE} = DataTypes
 const logger = require('../lib/logs');
 
 module.exports = (sequelize) => {
@@ -30,7 +30,7 @@ module.exports = (sequelize) => {
         }
       },
       price: {
-        type: DECIMAL,
+        type: DOUBLE,
         allowNull: false,
         validate: {
           notEmpty: {
@@ -56,16 +56,19 @@ module.exports = (sequelize) => {
         }
       },
       entry_date: {
-        type: DATE,
+        type: STRING,
         allowNull: false,
         validate: {
-          isDate: {
-            msg: 'Invalid date format for entry date'
+          notEmpty: {
+            msg: 'The entry date field cannot be empty'
           },
-          isBefore: {
-            args: [new Date().toISOString().split('T')[0]],
-            msg: 'Entry date cannot be in the future'
-          }
+          // isDate: {
+          //   msg: 'Invalid date format for entry date'
+          // },
+          // isBefore: {
+          //   args: [new Date().toISOString().split('T')[0]],
+          //   msg: 'Entry date cannot be in the future'
+          // }
         }
       }
     }, {
