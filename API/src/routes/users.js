@@ -7,11 +7,16 @@ const { Op } = require('sequelize');
 router.post('/', async (req, res) => {
     try {
         const {name, last_name, birthdate, username, email, password} = req?.body;
-        
+    
         if(!name || !last_name || !birthdate || !username || !email || !password) {
-            logger.info(`Failed. The data necessary for this request has not been sent: name, surname, date of birth, username, email and password.`);
-            return res.status(400).json({error: `Failed. The data necessary for this request has not been sent: name, surname, date of birth, username, email and password.`});
+            logger.info(`Failed. The data necessary for this request has not been sent: name, date of birth, username, email and password.`);
+            return res.status(200).json({error: `Failed. The data necessary for this request has not been sent: name, date of birth, username, email and password.`});
         };
+
+        if(password.length < 8 || password.length > 30) {
+            logger.info(`password length is 8 to 30 characters`);
+            return res.status(200).json({error: `password length is 8 to 30 characters`});
+        }
 
         const exitsUser = await User.findAll({
             where: {
@@ -24,7 +29,7 @@ router.post('/', async (req, res) => {
 
         if(exitsUser?.length > 0) {
             logger.info(`The user already exists, please select another email or username.`);
-            return res.status(400).json({error: 'The user already exists, please select another email or username.'});
+            return res.status(200).json({error: 'The user already exists, please select another email or username.'});
         };
 
      
