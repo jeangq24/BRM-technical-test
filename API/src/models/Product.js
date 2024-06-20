@@ -30,7 +30,7 @@ module.exports = (sequelize) => {
         }
       },
       price: {
-        type: DOUBLE,
+        type: INTEGER,
         allowNull: false,
         validate: {
           notEmpty: {

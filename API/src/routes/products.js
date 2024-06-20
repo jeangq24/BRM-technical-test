@@ -33,7 +33,7 @@ router.post('/', authenticateToken, async (req, res) => {
         };
         
         const createdProduct = await Product.create({name, lot_number, price, stock, entry_date});
-        logger.log('Successfully created product')
+        logger.info('Successfully created product')
         res.status(200).json(createdProduct);
 
     } catch (error) {
@@ -77,7 +77,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
         product.name = name || product.name;
         product.lot_number = lot_number || product.lot_number;
         product.price = price || product.price;
-        product.stock = stock || product.stock;
+        product.stock = ((stock < 0) ? false : stock) || product.stock;
         product.entry_date = entry_date || product.entry_date;
 
         await product.save();

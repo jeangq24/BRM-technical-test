@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
         }
       },
       total: {
-        type: DECIMAL,
+        type: INTEGER,
         allowNull: false,
         validate: {
           notEmpty: {
