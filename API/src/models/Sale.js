@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const {INTEGER, DECIMAL, DATE} = DataTypes;
+const {INTEGER, DECIMAL, DATE, STRING} = DataTypes;
 const logger = require('../lib/logs');
 
 module.exports = (sequelize) => {
@@ -14,14 +14,15 @@ module.exports = (sequelize) => {
       date: {
         type: DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW,
         validate: {
           isDate: {
             msg: 'Invalid date format for fecha'
           },
-          isBefore: {
-            args: [new Date().toISOString().split('T')[0]],
-            msg: 'Sale date cannot be in the future'
-          }
+          // isBefore: {
+          //   args: [new Date().toISOString().split('T')[0]],
+          //   msg: 'Sale date cannot be in the future'
+          // }
         }
       },
       total: {

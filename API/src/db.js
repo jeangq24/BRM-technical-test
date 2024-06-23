@@ -51,19 +51,17 @@ try {
 
 const { Person, User, Rol, Sale, Product } = sequelize.models;
 
-Person.hasOne(User); // Relación 1:1 entre Person y User
-User.belongsTo(Person); // User pertenece a una Person
+Person.hasOne(User);
+User.belongsTo(Person);
 
-User.belongsTo(Rol); // User pertenece a un Rol
-Rol.hasMany(User); // Un Rol puede tener muchos Users
+User.belongsTo(Rol);
+Rol.hasMany(User);   
 
-User.hasOne(Sale); // User tiene una relación 1:1 con Sale
-Sale.belongsTo(User); // Sale pertenece a un User
+User.hasOne(Sale, { foreignKey: 'userId' });
+Sale.belongsTo(User, { foreignKey: 'userId' });
 
-Sale.belongsTo(Product); // Sale pertenece a un Product
-Product.hasMany(Sale); // Un Product puede tener muchos Sales
-
-
+Sale.belongsToMany(Product, { through: 'SaleProduct' });
+Product.belongsToMany(Sale, { through: 'SaleProduct' });
 
 module.exports = {
   ...sequelize.models,
