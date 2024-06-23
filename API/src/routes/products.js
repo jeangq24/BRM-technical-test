@@ -20,16 +20,17 @@ const authenticateToken = require('./middleware/authenticateToken');
 router.post('/', authenticateToken, async (req, res) => {
     try {
         //Se valida que el usuario sea administrador
-        if(req?.user?.rol !== 1) {
+        console.log(req.user)
+        if(req?.user?.rol !== 'Admin') {
             logger.error('To perform this action your account must have an administrator role');
-            return res.status(400).json({error: `To perform this action your account must have an administrator role`});
+            return res.status(200).json({error: `To perform this action your account must have an administrator role`});
         };
         
         const {name, lot_number, price, stock, entry_date } = req?.body;
 
         if(!name || !lot_number || !price || !stock || !entry_date) {
             logger.info(`Failed. The data necessary for this request has not been sent: name lotnumber price stock entry date`);
-            return res.status(400).json({error: `Failed. The data necessary for this request has not been sent: name lotnumber price stock entry date`});
+            return res.status(200).json({error: `Failed. The data necessary for this request has not been sent: name lotnumber price stock entry date`});
         };
         
         const createdProduct = await Product.create({name, lot_number, price, stock, entry_date});
@@ -71,7 +72,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
         
         if (!product) {
             logger.error('Product not found');
-            return res.status(404).json({ error: 'Product not found' });
+            return res.status(200).json({ error: 'Product not found' });
         };
 
         product.name = name || product.name;
@@ -98,7 +99,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
         const product = await Product.findByPk(id);
         if (!product) {
             logger.error('Product not found');
-            return res.status(404).json({ error: 'Product not found' });
+            return res.status(200).json({ error: 'Product not found' });
         };
 
         await product.destroy();

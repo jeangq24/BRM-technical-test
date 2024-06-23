@@ -15,6 +15,7 @@ router.post('/', async (req, res) => {
         };
         let infoString;
         const user = await User.findOne({ where: { email } });
+        console.log(user)
         if(!user) {
             infoString = 'User not found';
             logger.error(infoString)
@@ -28,7 +29,7 @@ router.post('/', async (req, res) => {
             return res.status(401).json({ error: infoString });
         };
 
-        const token = jwt.sign({ id: user.id, username: user.username, email: user.email, rol: 1}, SECRET_KEY, { expiresIn: '24h' });
+        const token = jwt.sign({ id: user.id, username: user.username, email: user.email, rol: user.RolId}, SECRET_KEY, { expiresIn: '24h' });
         infoString = 'Login completed'
         logger.info(infoString);
         const {id, username, personId} = user;

@@ -5,11 +5,6 @@ module.exports = (sequelize) => {
   try {
     // Definición del modelo
     sequelize.define('Rol', {
-      id: {
-        type: INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
       status: {
         type: BOOLEAN,
         allowNull: false,
@@ -20,18 +15,15 @@ module.exports = (sequelize) => {
           }
         }
       },
-      rol: {
+      id: {
         type: STRING,
         allowNull: false,
+        primaryKey: true,
         unique: true,
         validate: {
           notEmpty: {
             msg: 'The rol field cannot be empty'
           },
-          len: {
-            args: [3, 50],
-            msg: 'The rol field must be between 3 and 50 characters long'
-          }
         }
       }
     }, {
