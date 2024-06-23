@@ -36,7 +36,7 @@ POST - Crea un producto, GET - Obtiene todos los poductos registrados.
 - /products/{id}:
 PUT - Edita un producto, DELETE - Elimina un producto
 
-- /sale: POST - Genera una venta (modifica stock de productos)
+- /sale: POST - Genera una venta, GET - Obtiene la lista de ventas asosiadas al usuario logueado
 
 
 ## CLIENTE

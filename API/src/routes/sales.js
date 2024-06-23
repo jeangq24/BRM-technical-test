@@ -3,6 +3,7 @@ const router = Router();
 const logger = require('../lib/logs');
 const { Sale, Product } = require('../db.js');
 const authenticateToken = require('./middleware/authenticateToken');
+const { generateInvoice } = require('../lib/generateInovice.js');
 
 router.post('/', authenticateToken, async (req, res) => {
     try {
@@ -52,8 +53,8 @@ router.post('/', authenticateToken, async (req, res) => {
             where: { id: createdSale.id },
             include: Product
         });
-
-        logger.info('Successfully created sale');
+        generateInvoice(createdSale, saleWithProducts, total);
+        logger.info('Successfully created sale and invoice');
         return res.status(200).json(saleWithProducts);
 
     } catch (error) {
