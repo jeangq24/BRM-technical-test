@@ -3,9 +3,14 @@ const path = require('path');
 const PDFDocument = require('pdfkit');
 
 const generateInvoice = (createdSale, saleWithProducts, total) => {
-
     const pdfFileName = `invoice_${createdSale.id}.pdf`;
-    const pdfPath = path.join(__dirname, '..', 'invoices', pdfFileName);
+    const invoicesDir = path.join(__dirname, '..', 'invoices');
+    const pdfPath = path.join(invoicesDir, pdfFileName);
+
+    if (!fs.existsSync(invoicesDir)) {
+        fs.mkdirSync(invoicesDir);
+    };
+
     const doc = new PDFDocument();
     doc.pipe(fs.createWriteStream(pdfPath));
     doc.fontSize(18).text('Factura', { align: 'center' });
@@ -16,9 +21,9 @@ const generateInvoice = (createdSale, saleWithProducts, total) => {
         const product = saleWithProducts.Products[index];
         const { name, price, SaleProduct: { amount } } = product;
         const subtotal = price * amount;
-        doc.text(`Producto: ${index + 1}: ${name}, Precio: $${price}`);
+        doc.text(`Producto ${index + 1}: ${name}, Precio: $${price}`);
         doc.moveDown();
-    };
+    }
 
     doc.fontSize(16).text(`Total: $${total}`, { align: 'right' });
     doc.end();
@@ -26,5 +31,5 @@ const generateInvoice = (createdSale, saleWithProducts, total) => {
 
 module.exports = {
     generateInvoice
-}
+};
 
