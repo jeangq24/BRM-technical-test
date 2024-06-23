@@ -49,8 +49,6 @@ router.post('/', authenticateToken, async (req, res) => {
  * @apiName GetProducts
  * @apiGroup Products
  *
- * @apiParam {Number} id Product unique ID.
- *
  * @apiSuccess {JSON} Array of the products.
  */
 
@@ -64,6 +62,21 @@ router.get('/', authenticateToken, async (req, res) => {
     }
 });
 
+
+/**
+ * @api {put} /products Request edit Product
+ * @apiName PutProduct
+ * @apiGroup Products
+ *
+ * @apiParams {id} id PK Product
+ * @apiBody {name} name Product String.
+ * @apiBody {lot_number} lot_number Product String.
+ * @apiBody {price} price Product Double.
+ * @apiBody {stock} stock Product Integer.
+ * @apiBody {entry_date} entry date Product String.
+ *
+ * @apiSuccess {JSON} Object product.
+ */
 router.put('/:id', authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;
@@ -92,6 +105,16 @@ router.put('/:id', authenticateToken, async (req, res) => {
     };
 });
 
+
+/**
+ * @api {delete} /products Request delete Product
+ * @apiName DeleteProduct
+ * @apiGroup Products
+ *
+ * @apiParams {id} id PK Product
+ *
+ * @apiSuccess {JSON} Object message.
+ */
 router.delete('/:id', authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;

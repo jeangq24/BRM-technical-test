@@ -11,7 +11,13 @@ router.post('/', async (req, res) => {
         if(!name || !last_name || !birthdate || !username || !email || !password || !rol) {
             logger.info(`Failed. The data necessary for this request has not been sent: name, surname, date of birth, rol, username, email and password.`);
             return res.status(200).json({error: `Failed. The data necessary for this request has not been sent: name, surname, date of birth, rol, username, email and password.`});
+
         };
+
+        if(password.length < 8 || password.length > 30) {
+            logger.info(`password length is 8 to 30 characters`);
+            return res.status(200).json({error: `password length is 8 to 30 characters`});
+        }
 
         const exitsUser = await User.findAll({
             where: {
