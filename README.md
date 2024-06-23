@@ -27,16 +27,62 @@ Puede visualizar la consola para ver el log que indicar que se ha inicado conrre
 - /users:
 POST - creara un usuario.
 
+body:
+{
+  "name":"Ejemplo",
+  "last_name":"Ejemplo", 
+  "birthdate":"24/03/1999",
+  "email": "ejemplo24@gmail.com",
+  "username": "ejemplo24",
+  "password": "12345678",
+  "rol": "Admin"
+} 
+
 - /auth:
-POST - autentica un usuario.
+POST - autentica un usuario. (retorna token bearer para las peticiones donde se requiera autenticar )
+
+body:
+
+{
+  "email": "ejemplo24@gmail.com",
+  "password": "12345678"
+}
 
 - /products:
-POST - Crea un producto, GET - Obtiene todos los poductos registrados.
+POST - Crea un producto (requiere tener rol Admin), GET - Obtiene todos los poductos registrados. (requiere autenticacion bearer )
+
+body (POST):
+
+{
+"name": "panela", 
+"lot_number": "123", 
+"price": 5000, 
+"stock": 100, 
+"entry_date": "19/06/2024" 
+}
 
 - /products/{id}:
-PUT - Edita un producto, DELETE - Elimina un producto
+PUT - Edita un producto, DELETE - Elimina un producto (requiere autenticacion bearer)
 
-- /sale: POST - Genera una venta, GET - Obtiene la lista de ventas asosiadas al usuario logueado
+
+body (PUT):
+
+http://localhost:3001/products/1
+
+{
+"price": 2000, 
+"stock": 5000, 
+}
+
+
+- /sale: POST - Genera una venta, GET - Obtiene la lista de ventas asosiadas al usuario logueado (requiere autenticacion bearer)
+
+body: 
+
+{
+"productsList": [{"id": 1, "amount": 10}]
+}
+
 
 
 ## CLIENTE
