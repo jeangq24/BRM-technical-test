@@ -1,95 +1,132 @@
 # BRM-technical-test
 Online store
 
-## API:
+# Instrucciones para la API y Cliente
 
-### Instrucciones:
+## API
 
-En la carpeta API abra una terminal (programas necesarios para correr el API rest Nodejs, npm, postgresql) y luego ejecute como primera instancia "npm install --save" para descargar las dependencia necesarias y asi poder ejecutar el servidor de forma local. 
-Genere un archivo llamado ".env" a la altura de la carpeta API y alli genere las seguientes variables de entorno:
-- DB_USER=postgres  (usuario postgres)
-- DB_PASSWORD=postgres (contraseña de usuario postgres)
-- DB_HOST=localhost (dominio)
-- DB_NAME=shopdev (nombre de la base de datos)
+### Requisitos Previos
+- Node.js
+- npm
+- PostgreSQL
 
-Esto son los valores que trabajaran por defecto, puede modificarlos en caso de que quiere remplazar por otros valores. **RECUERDA QUE POR DEFECTO POSTGRESQL SE EJECUTA EN EL PUERTO 5432.**
+### Pasos para Configuración y Ejecución
 
-Una vez se realize la configuracion mencionada anterioremente bastara con ejecutar en la colsa el comando "npm start" estar levatara el servidor el cual correra en puerto 3001.
+1. **Abrir Terminal en la Carpeta API**
+   - Navegue a la carpeta `API` y abra una terminal.
 
-Puede visualizar la consola para ver el log que indicar que se ha inicado conrrectamente el servidor: 
-* {"level":"info","message":"Server is listening at port 3001","timestamp":"2024-06-20T06:11:05.695Z"}
+2. **Instalación de Dependencias**
+   - Ejecute el siguiente comando para instalar las dependencias necesarias:
+     ```bash
+     npm install --save
+     ```
 
-**Asi mismo se genera un archivo llamado "combined.log" donde se podran  ver resgistrados todos los log desde la ejecucion del servidor (el archivo se encuentra a la altura de la carpeta api)**
+3. **Configuración de Variables de Entorno**
+   - Cree un archivo llamado `.env` en la raíz de la carpeta `API` y agregue las siguientes variables de entorno:
+     ```
+     DB_USER=postgres
+     DB_PASSWORD=postgres
+     DB_HOST=localhost
+     DB_NAME=shopdev
+     ```
+   - Estos son los valores por defecto; puede modificarlos si desea usar otros valores.
+   - **Nota:** PostgreSQL se ejecuta por defecto en el puerto 5432.
+
+4. **Ejecución del Servidor**
+   - Una vez configurado el entorno, ejecute el siguiente comando para iniciar el servidor:
+     ```bash
+     npm start
+     ```
+   - El servidor se ejecutará en el puerto 3001.
+   - Verifique la consola para confirmar que el servidor se ha iniciado correctamente:
+     ```json
+     {"level":"info","message":"Server is listening at port 3001","timestamp":"2024-06-20T06:11:05.695Z"}
+     ```
+   - Los logs se registrarán en un archivo llamado `combined.log` en la carpeta `API`.
+
+### Rutas de la API
+
+- **/users: POST** - Crear un usuario.
+  ```json
+  {
+    "name": "Ejemplo",
+    "last_name": "Ejemplo",
+    "birthdate": "24/03/1999",
+    "email": "ejemplo24@gmail.com",
+    "username": "ejemplo24",
+    "password": "12345678",
+    "rol": "Admin"
+  }
+  ```
+- **/auth: POST** - Autenticar un usuario (retorna token bearer).  
+  ```json
+  {
+    "email": "ejemplo24@gmail.com",
+    "password": "12345678"
+  }
+  ```
+
+- **/products: POST** - Crear un producto (requiere rol Admin).
+  ```json
+  {
+    "name": "panela",
+    "lot_number": "123",
+    "price": 5000,
+    "stock": 100,
+    "entry_date": "19/06/2024"
+  }
+  ```
+
+- **/products: GET** - Obtener todos los productos registrados (requiere autenticación bearer).
+- **/products/{id}: PUT** - Editar un producto (requiere autenticación bearer).
+
+  ```json
+  {
+    "price": 2000,
+    "stock": 5000
+  }
+
+  ```
+
+- **/products/{id}: DELETE** - Eliminar un producto (requiere autenticación bearer).
+- **/sale: POST** - Generar una venta (requiere autenticación bearer).
+
+  ```json
+  {
+    "productsList": [
+    {"id": 1, "amount": 10}
+    ]
+  }
+
+  ```
+- **/sale: GET** - Obtener la lista de ventas asociadas al usuario autenticado (requiere autenticación bearer)
+
+# Cliente
+
+## Pasos para Configuración y Ejecución
+
+1. **Abrir Terminal en la Carpeta Cliente**
+   - Navegue a la carpeta `cliente` y abra una terminal.
+
+2. **Instalación de Dependencias**
+   - Ejecute el siguiente comando para instalar las dependencias necesarias:
+     ```bash
+     npm install --save
+     ```
+
+3. **Ejecución del Cliente**
+   - Para ejecutar el cliente, ejecute el siguiente comando:
+     ```bash
+     npm run dev
+     ```
+   - El cliente se ejecutará en el puerto 3000.
+   - Este cliente está desarrollado con el framework Next.js junto a Tailwind CSS.
+
+## Notas Adicionales
+
+- **Módulos Pendientes:** Por falta de tiempo, no se completaron los módulos necesarios para la gestión de compra y registro de inventario desde el cliente. Sin embargo, el API cuenta con los endpoints necesarios para estas funciones.
+- **Registro y Login:** El registro y login de usuario están completamente funcionales.
 
 
-### Rutas:
-
-- /users:
-POST - creara un usuario.
-
-body:
-{
-  "name":"Ejemplo",
-  "last_name":"Ejemplo", 
-  "birthdate":"24/03/1999",
-  "email": "ejemplo24@gmail.com",
-  "username": "ejemplo24",
-  "password": "12345678",
-  "rol": "Admin"
-} 
-
-- /auth:
-POST - autentica un usuario. (retorna token bearer para las peticiones donde se requiera autenticar )
-
-body:
-
-{
-  "email": "ejemplo24@gmail.com",
-  "password": "12345678"
-}
-
-- /products:
-POST - Crea un producto (requiere tener rol Admin), GET - Obtiene todos los poductos registrados. (requiere autenticacion bearer )
-
-body (POST):
-
-{
-"name": "panela", 
-"lot_number": "123", 
-"price": 5000, 
-"stock": 100, 
-"entry_date": "19/06/2024" 
-}
-
-- /products/{id}:
-PUT - Edita un producto, DELETE - Elimina un producto (requiere autenticacion bearer)
 
 
-body (PUT):
-
-http://localhost:3001/products/1
-
-{
-"price": 2000, 
-"stock": 5000, 
-}
-
-
-- /sale: POST - Genera una venta, GET - Obtiene la lista de ventas asosiadas al usuario logueado (requiere autenticacion bearer)
-
-body: 
-
-{
-"productsList": [{"id": 1, "amount": 10}]
-}
-
-
-
-## CLIENTE
-
-En la carpeta cliente abra una terminal y luego ejecute como primera instacia "npm install --save" para descargar las dependencia necesarias y asi poder ejecutar el cliente de forma local.
-
-+ Para ejecutar el cliente lo puede hacer escrbiendo en la consola "npm run dev", el cliente se ejecutara en el puerto 3000
-Este cliente esta trabajando con el framework de Nextjs junto a tailwindcss
-
-**Por falta de tiempo no pude completar los modulos necesarios para la gestios de compra y registro de inventario (desde el cliente, el API cuenta con los edpoints para hacerlo), EL REGISTRO Y LOGIN DE USUARIO SE ENCUENTRA FUNCIONAL**
