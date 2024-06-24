@@ -13,7 +13,7 @@ conn.sync({ force: false })
           { id: 'Admin', status: true },
           { id: 'User', status: true },
         ];
-        await Rol.bulkCreate(defaultRoles); // Asume que defaultRoles está definido en un archivo de configuración
+        await Rol.bulkCreate(defaultRoles);
         logger.info('Default roles have been added successfully.');
       } else {
         logger.info('Roles already exist in the database.');

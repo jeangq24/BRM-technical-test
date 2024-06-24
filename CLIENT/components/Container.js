@@ -1,7 +1,8 @@
 export default ({ children }) => {
+  
     return (
         <container
-            className={`flex min-h-screen h-auto flex-col items-center justify-start`}
+            className={`flex w-screen h-screen flex-col px-10 md:px-24`}
         >
             {children}
         </container>

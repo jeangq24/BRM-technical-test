@@ -1,49 +1,63 @@
-import toast from "react-hot-toast"
-import axios from "axios";
-export const loginFunction = async (email, password) => {
+import toast from "react-hot-toast";
+
+
+export const loginFunction = async (emailValue, passwordValue, setIsLoading, login, Router) => {
     try {
-        const loginToken = await axios({
-            method: 'post',
-            url: 'http://127.0.0.1:3001/auth',
-            data: {
-              email, password
-            }
-          });
-          console.log(loginToken?.data)
-        if (loginToken?.data?.error) {
-            toast.error(loginToken?.data?.error);
+
+        setIsLoading(true);
+        const response = await fetch('http://localhost:3001/auth/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: emailValue, password: passwordValue }),
+        });
+
+        const result = await response.json();
+        if (result?.error) {
+            toast.error(result?.error)
         } else {
-            localStorage.setItem('userData', JSON.stringify(loginToken?.data));
-        };
-
-        return loginToken?.data;
-
+            const { token, user } = result;
+            login(token, user);
+            toast.success('Welcome');
+            Router.push('/');
+        }
+        setIsLoading(false);
+        return;
     } catch (error) {
-        console.log("loginFunction error: ", error);
-        return {error: error};
+        console.error('Login error:', error);
+        setIsLoading(false);
+        return;
     };
 };
 
-export const registerFunction = async (email, username, name, lastName, password) => {
+
+export const registerFunction = async (data, setIsLoading, resetField) => {
     try {
-      
-        const userRegistred = await axios({
-            method: 'post',
-            url: 'http://127.0.0.1:3001/users',
-            data: {
-              email, password, username, name, last_name: lastName, birthdate: '24/03/1999'
-            }
-          });
+        console.log(data)
+        setIsLoading(true);
+        const { emailValue, passwordValue, nameValue, birthDateValue, lastNameValue, userNameValue } = data;
+        const response = await fetch('http://localhost:3001/users/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: emailValue, password: passwordValue, name: nameValue, birthdate: birthDateValue, last_name: lastNameValue, username: userNameValue, rol: 'User' }),
+        });
 
-        if (userRegistred.data.error) {
-            toast.error(userRegistred.data.error);
-        };
-
-
-        return userRegistred.data;
+        const result = await response.json();
+        if (result?.error) {
+            toast.error(result?.error)
+        }else {
+            resetField()
+            toast.success('Successful registration');
+        }
+        setIsLoading(false);
+        return;
 
     } catch (error) {
-        console.log("registerFunction error: ", error)
-        return {error: error}
+        console.error('Login error:', error);
+        setIsLoading(false);
+        return;
     };
-};
+}

@@ -5,17 +5,23 @@ import InputPassword from "@/components/InputPassword";
 import Button from "@/components/Button";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { loginFunction, registerFunction } from "@/lib/auth";
 import Router from 'next/router';
-
+import { loginFunction, registerFunction } from '@/lib/auth';
+import { useUser } from '@/lib/UserContext';
+import Container from "@/components/Container";
+import InputDate from "@/components/InputDate";
 
 export default () => {
-
+    const { login } = useUser();
     return (
-        <>
-            <RegisterUser />
-            <LoginUser />
-        </>
+        <Container>
+            <div className="flex flex-col md:flex-row w-full h-full gap-10 py-20">
+                <LoginUser login={login} />
+                <div className="h-full bg-black w-[1px]"></div>
+                <RegisterUser />
+
+            </div>
+        </Container>
     )
 };
 
@@ -26,7 +32,8 @@ const RegisterUser = () => {
     const [lastNameValue, setLastNameValue] = useState('');
     const [userNameValue, setUserNameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
-
+    const [birthDateValue, setBirthDateValue] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const handleChangeEmail = (e) => {
         const { value } = e.target;
         setEmailValue(value)
@@ -52,15 +59,32 @@ const RegisterUser = () => {
         setPasswordValue(value);
     };
 
+    const handleChangeBirthDate = (e) => {
+        const { value } = e.target;
+        setBirthDateValue(value);
+    };
+
+    const resetField = () => {
+        setEmailValue('');
+        setLastNameValue('')
+        setNameValue('')
+        setPasswordValue('')
+        setUserNameValue('');
+    }
+
     const classNameIcons = "w-6 h-6 text-gray-400 absolute left-3 inset-y-0 my-auto";
     return (
-        <div >
+        <div className="flex flex-col gap-4 w-full md:w-1/2">
+            <h1 className="text-2xl font-bold w-full text-center">Register</h1>
             <InputText placeholder={"Enter your name"} textLabel={'Name'} value={nameValue} onChange={handleChangeName}>
                 <CiUser className={classNameIcons} />
             </InputText>
             <InputText placeholder={"Enter your last name"} textLabel={'Last name'} value={lastNameValue} onChange={handleChangeLastName}>
                 <CiUser className={classNameIcons} />
             </InputText>
+            <InputDate placeholder={"Enter your birth date"} textLabel={"Birt date"} value={birthDateValue} onChange={handleChangeBirthDate}>
+                <CiUser className={classNameIcons} />
+            </InputDate>
             <InputText placeholder={"Enter your username"} textLabel={'Username'} value={userNameValue} onChange={handleChangeUserName}>
                 <CiUser className={classNameIcons} />
             </InputText>
@@ -68,27 +92,17 @@ const RegisterUser = () => {
                 <CiMail className={classNameIcons} />
             </InputText>
             <InputPassword value={passwordValue} onChange={handleChangePassword} />
-            <Button text={'Register'} onClick={async () => {
-
-                let result = await registerFunction(emailValue, userNameValue, nameValue, lastNameValue, passwordValue);
-
-                if(!result?.error) {
-                    setEmailValue('');
-                    setLastNameValue('')
-                    setNameValue('')
-                    setPasswordValue('')
-                    setUserNameValue('');
-                    toast.success('Successful registration');
-                };
-            }} />
+            <Button text={'Register'} onClick={() => {registerFunction({ emailValue, userNameValue, nameValue, lastNameValue, passwordValue, birthDateValue }, setIsLoading, resetField)}} />
 
         </div>
     )
 };
 
-const LoginUser = () => {
+const LoginUser = ({ login }) => {
+
     const [emailValue, setEmailValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChangeEmail = (e) => {
         const { value } = e.target;
@@ -102,21 +116,17 @@ const LoginUser = () => {
 
     const classNameIcons = "w-6 h-6 text-gray-400 absolute left-3 inset-y-0 my-auto";
     return (
-        <div>
+
+        <div className="flex flex-col gap-4 w-full md:w-1/2">
+            <h1 className="text-2xl font-bold w-full text-center">Login</h1>
             <InputText placeholder={"Enter your email"} textLabel={'Email'} onChange={handleChangeEmail} value={emailValue}>
                 <CiMail className={classNameIcons} />
             </InputText>
             <InputPassword onChange={handleChangePassword} value={passwordValue} />
-            <Button text={'Login'} onClick={async() => {
-               let result = await loginFunction(emailValue, passwordValue);
-               if(!result?.error) {
-                setEmailValue('');
-                setPasswordValue('')
-                toast.success('Successful login');
-                Router.push('/');
-            };
-            }}
+            <Button text={'Login'} onClick={() => loginFunction(emailValue, passwordValue, setIsLoading, login, Router)}
             />
+
         </div>
+
     )
 }
