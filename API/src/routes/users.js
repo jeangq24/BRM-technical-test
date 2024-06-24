@@ -4,6 +4,22 @@ const logger = require('../lib/logs');
 const {Person, User, Rol} = require('../db');
 const { Op } = require('sequelize');
 
+
+/**
+ * @api {post} /users Request user
+ * @apiName PostUser
+ * @apiGroup Users
+ *
+ * @apiBody {name} name user String.
+ * @apiBody {last_name} last nam user String.
+ * @apiBody {birthdate} birth date user String.
+ * @apiBody {username} username user String.
+ * @apiBody {email} email user String.
+ * @apiBody {password} password user String.
+ * @apiBody {rol} rol user String (Admin or User).
+ *
+ * @apiSuccess {JSON} Object user.
+ */
 router.post('/', async (req, res) => {
     try {
         const {name, last_name, birthdate, username, email, password, rol} = req?.body;

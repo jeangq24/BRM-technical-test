@@ -6,6 +6,16 @@ const {User} = require('../db');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY || 'your_secret_key';
 
+/**
+ * @api {post} /auth Request login
+ * @apiName PostAuth
+ * @apiGroup Auth
+ *
+ * @apiBody {email} email User String.
+ * @apiBody {password} password User String.
+ *
+ * @apiSuccess {JSON} Object user.
+ */
 router.post('/', async (req, res) => {
     try {
         const {email, password} = req?.body;

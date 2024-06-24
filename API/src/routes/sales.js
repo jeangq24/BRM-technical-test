@@ -5,6 +5,17 @@ const { Sale, Product } = require('../db.js');
 const authenticateToken = require('./middleware/authenticateToken');
 const { generateInvoice } = require('../lib/generateInovice.js');
 
+
+
+/**
+ * @api {post} /sales Request sale
+ * @apiName PostSale
+ * @apiGroup Sale
+ *
+ * @apiBody {productsList} list producs [{id, amount}] Array.
+ *
+ * @apiSuccess {JSON} Object sale.
+ */
 router.post('/', authenticateToken, async (req, res) => {
     try {
 
@@ -65,6 +76,13 @@ router.post('/', authenticateToken, async (req, res) => {
 });
 
 
+/**
+ * @api {get} /sales Request sale
+ * @apiName GetSale
+ * @apiGroup Sale
+ *
+ * @apiSuccess {JSON} Object list sales.
+ */
 router.get('/', authenticateToken, async (req, res) => {
     try {
         const { id } = req?.user;
